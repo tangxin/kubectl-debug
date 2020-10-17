@@ -65,7 +65,7 @@ Run a container in a running pod, this container will join the namespaces of an 
 
 You may set default configuration such as image and command in the config file, which locates in "~/.kube/debug-config" by default.
 `
-	defaultImage          = "docker.io/nicolaka/netshoot:latest"
+	defaultImage          = "registry.cn-hangzhou.aliyuncs.com/querycapimages/netshoot:latest"
 	defaultAgentPort      = 10027
 	defaultConfigLocation = "/.kube/debug-config"
 	defaultDaemonSetName  = "debug-agent"
@@ -73,7 +73,7 @@ You may set default configuration such as image and command in the config file, 
 
 	usageError = "expects 'debug POD_NAME' for debug command"
 
-	defaultAgentImage             = "aylei/debug-agent:latest"
+	defaultAgentImage             = "registry.cn-hangzhou.aliyuncs.com/querycapimages/kubectl-debug-agent:latest"
 	defaultAgentPodNamePrefix     = "debug-agent-pod"
 	defaultAgentPodNamespace      = "default"
 	defaultAgentPodCpuRequests    = ""
@@ -578,6 +578,9 @@ func (o *DebugOptions) Run() error {
 		params.Add("image", o.Image)
 		params.Add("container", containerID)
 		params.Add("verbosity", fmt.Sprintf("%v", o.Verbosity))
+		if o.Verbosity == 0 {
+			params.Set("verbosity", "1")
+		}
 		hstNm, _ := os.Hostname()
 		params.Add("hostname", hstNm)
 		usr, _ := user.Current()
